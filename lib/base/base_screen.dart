@@ -28,29 +28,6 @@ class _BaseState extends State<BaseScreen> {
           onMessageReceived: (JavaScriptMessage jsMessage) async {
         Map<String, dynamic> data = jsonDecode(jsMessage.message);
         printer(data);
-        // {name: David Gaspar, methodology: VIVA LEVE, level: 1, stage: 1, specialNeeds: [{name: Problemas Cardíacos ou Pressão Alta, priority: 100, showName: Cuidar da Saúde do coração}, {name: Ansiedade, priority: 80, showName: Melhorar a Ansiedade}, {name: Qualidade do Sono, priority: 70, showName: Dormir melhor}], createdAt: 2023-06-09T22:10:29.294Z}
-        // print(data);
-
-        // print("Nome: ${data["name"]}");
-        // print("Nivel: ${data["level"]}");
-        // print("Fase: ${data["stage"]}");
-        // print("Metodologia: ${data["methodology"]}");
-
-        // int index = 0;
-        // for (var needs in List<Map<String, dynamic>>.from(data["specialNeeds"])) {
-        //   if(index == 0) {
-        //     print("Necessidades especiais");
-        //   }
-        //   print("> ${needs["showName"]}");
-        // }
-
-        // ByteData imgProductLogo = await rootBundle.load("assets/${(data["methodology"] as String).replaceAll(" ", "_")}.png");
-        // Uint8List bytesImgProductLogo = imgProductLogo.buffer.asUint8List();
-        // print(bytesImgProductLogo);
-
-        // ByteData imgActonLogo = await rootBundle.load("assets/acton_logo.png");
-        // Uint8List bytesImgActonLogo = imgActonLogo.buffer.asUint8List();
-        // print(bytesImgActonLogo);
       })
       ..addJavaScriptChannel('ExitInvoker',
           onMessageReceived: (JavaScriptMessage jsMessage) {

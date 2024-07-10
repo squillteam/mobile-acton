@@ -37,6 +37,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   esc_pos_printer: ^4.1.0
   webview_flutter: ^4.2.2
+  http: ^1.2.1
+  geolocator: ^12.0.0
 
 dev_dependencies:
   flutter_test:

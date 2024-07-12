@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:acton/helpers/device/GeoLocation.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:esc_pos_printer/esc_pos_printer.dart';
 import 'package:esc_pos_utils/esc_pos_utils.dart';
@@ -33,8 +35,14 @@ class _BaseState extends State<BaseScreen> {
           onMessageReceived: (JavaScriptMessage jsMessage) {
         SystemNavigator.pop();
       })
+      ..addJavaScriptChannel('CurrentLocationInvoker',
+          onMessageReceived: (JavaScriptMessage jsMessage) async {
+        Position position = await GeoLocation().getPosition();
+
+        _webViewController.runJavaScript(
+            'window.onCurrentLocation(${position.latitude},${position.longitude});');
+      })
       ..loadRequest(Uri.parse("https://web-acton.vercel.app"));
-    // WebView
   }
 
   @override
@@ -52,9 +60,7 @@ class _BaseState extends State<BaseScreen> {
             child: Container(
               width: 100,
               height: 100,
-              decoration: const BoxDecoration(
-                color: Colors.transparent
-              ),
+              decoration: const BoxDecoration(color: Colors.transparent),
             ),
           ),
         )
@@ -77,11 +83,12 @@ class _BaseState extends State<BaseScreen> {
           port: 9100, timeout: const Duration(seconds: 60));
 
       if (res == PosPrintResult.success) {
-        ByteData imgProductLogo = await rootBundle.load("assets/${(data["methodology"] as String).replaceAll(" ", "_")}.png");
+        ByteData imgProductLogo = await rootBundle.load(
+            "assets/${(data["methodology"] as String).replaceAll(" ", "_")}.png");
         Uint8List bytesImgProductLogo = imgProductLogo.buffer.asUint8List();
         Image? imgProduct = decodeImage(bytesImgProductLogo);
 
-        if(imgProduct != null) {
+        if (imgProduct != null) {
           printer.image(imgProduct);
         }
 
@@ -110,7 +117,7 @@ class _BaseState extends State<BaseScreen> {
         Uint8List bytesImgActonLogo = imgActonLogo.buffer.asUint8List();
         Image? imageActon = decodeImage(bytesImgActonLogo);
 
-        if(imageActon != null) {
+        if (imageActon != null) {
           printer.image(imageActon);
         }
 
